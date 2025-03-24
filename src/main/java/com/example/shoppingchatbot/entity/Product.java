@@ -30,7 +30,6 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore // @JsonIgnore로 category 직렬화 제외
     private Category category;
 
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -1,5 +1,6 @@
 package com.example.shoppingchatbot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,9 @@ public class Product {
 
     private int stock;
 
-    @ManyToOne(fetch = FetchType.LAZY) 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore // @JsonIgnore로 category 직렬화 제외
     private Category category;
 
     private LocalDateTime createdAt = LocalDateTime.now();

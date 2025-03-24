@@ -1,5 +1,6 @@
 package com.example.shoppingchatbot.service;
 
+import com.example.shoppingchatbot.dto.ProductCreateRequest;
 import com.example.shoppingchatbot.entity.Category;
 import com.example.shoppingchatbot.entity.Product;
 import com.example.shoppingchatbot.repository.CategoryRepository;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +36,22 @@ class ProductServiceTest {
     void 상품_생성_성공() {
         // given
         Category category = categoryRepository.save(new Category("전자기기", "전자제품"));
-        Product product = new Product("노트북", "고성능 노트북", 1500000, 10, category);
+
+        ProductCreateRequest request = new ProductCreateRequest(
+                "노트북",
+                "고성능 노트북",
+                1500000,
+                10,
+                category.getId()
+        );
+
+        Product product = new Product(
+                request.name(),
+                request.description(),
+                request.price(),
+                request.stock(),
+                category
+        );
 
         // when
         Product savedProduct = productService.createProduct(product);
@@ -54,7 +68,7 @@ class ProductServiceTest {
         productService.createProduct(new Product("TV", "OLED TV", 1000000, 20, category));
 
         // when
-        List<Product> products = productService.getAllProducts();
+        var products = productService.getAllProducts();
 
         // then
         assertThat(products).hasSize(1);
